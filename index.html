@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BME Sports Club Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0a0f1e;
+    --surface: #101828;
+    --border: #1e2d40;
+    --accent: #00e5a0;
+    --accent2: #0af;
+    --text: #e8f0fe;
+    --muted: #6b7fa3;
+    --error: #ff5c5c;
+    --radius: 10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 16px 80px;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0,229,160,0.08) 0%, transparent 70%),
+      repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px),
+      repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px);
+  }
+
+  .card {
+    width: 100%;
+    max-width: 620px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    animation: fadeUp 0.5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .header {
+    padding: 36px 40px 28px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, #0d1a2e 0%, #0f2318 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='1' fill='%2300e5a0' opacity='0.15'/%3E%3C/svg%3E") repeat;
+  }
+  .header-tag {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .header h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(22px, 5vw, 30px);
+    font-weight: 700;
+    line-height: 1.2;
+    color: #fff;
+    position: relative;
+  }
+  .header p {
+    margin-top: 10px;
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.6;
+    position: relative;
+  }
+  .header a { color: var(--accent); text-decoration: none; }
+  .header a:hover { text-decoration: underline; }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.4s ease;
+    border-radius: 2px;
+  }
+  .progress-label {
+    padding: 10px 40px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+  }
+
+  .section { display: none; padding: 32px 40px 36px; animation: fadeIn 0.3s ease both; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .section-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .field { margin-bottom: 22px; }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  label .req { color: var(--accent); margin-left: 2px; }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"] {
+    width: 100%;
+    background: #0a0f1e;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,229,160,0.1);
+  }
+  input.error { border-color: var(--error); }
+
+  .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 10px; }
+  .radio-option, .checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    font-size: 14.5px;
+  }
+  .radio-option:hover, .checkbox-option:hover {
+    border-color: var(--accent);
+    background: rgba(0,229,160,0.04);
+  }
+  .radio-option.selected, .checkbox-option.selected {
+    border-color: var(--accent);
+    background: rgba(0,229,160,0.07);
+    color: #fff;
+  }
+  .radio-option input, .checkbox-option input { display: none; }
+  .dot {
+    width: 16px; height: 16px;
+    border: 2px solid var(--muted);
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s;
+  }
+  .radio-option.selected .dot { border-color: var(--accent); }
+  .dot::after {
+    content: '';
+    width: 7px; height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .radio-option.selected .dot::after { opacity: 1; }
+  .checkbox-dot {
+    width: 16px; height: 16px;
+    border: 2px solid var(--muted);
+    border-radius: 4px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .checkbox-option.selected .checkbox-dot {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+  .checkbox-dot::after {
+    content: '✓';
+    font-size: 10px;
+    color: #000;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .checkbox-option.selected .checkbox-dot::after { opacity: 1; }
+
+  .error-msg {
+    font-size: 12px;
+    color: var(--error);
+    margin-top: 6px;
+    display: none;
+  }
+  .field.has-error .error-msg { display: block; }
+  .field.has-error input { border-color: var(--error); }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .btn {
+    padding: 13px 28px;
+    border-radius: var(--radius);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #00c882);
+    color: #000;
+    flex: 1;
+  }
+  .btn-primary:hover { box-shadow: 0 4px 20px rgba(0,229,160,0.3); }
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .btn-secondary:hover { border-color: var(--muted); color: var(--text); }
+
+  .success {
+    padding: 60px 40px;
+    text-align: center;
+    display: none;
+    animation: fadeIn 0.5s ease both;
+  }
+  .success.active { display: block; }
+  .success-icon {
+    width: 72px; height: 72px;
+    background: rgba(0,229,160,0.1);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 28px;
+  }
+  .success h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #fff;
+  }
+  .success p { font-size: 14.5px; color: var(--muted); line-height: 1.7; }
+  .success a { color: var(--accent); text-decoration: none; }
+
+  .info-box {
+    background: rgba(0,229,160,0.05);
+    border: 1px solid rgba(0,229,160,0.15);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 520px) {
+    .header, .section, .success { padding-left: 24px; padding-right: 24px; }
+    .progress-label { padding-left: 24px; padding-right: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="header">
+    <div class="header-tag">MIST · Dept. of Biomedical Engineering</div>
+    <h1>BME Sports Club<br>Registration Form</h1>
+    <p>Join the Department of Biomedical Engineering Sports Club. Please fill out the form accurately to register. Follow the <a href="https://www.facebook.com/bmemistsportsclub" target="_blank">BME Sports Club Facebook Page</a>.</p>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width: 16.6%"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">Step 1 of 6</div>
+
+  <!-- Section 1: Basic Info -->
+  <div class="section active" id="sec1">
+    <div class="section-title">Basic Information</div>
+
+    <div class="field" id="f-email">
+      <label>Email <span class="req">*</span></label>
+      <input type="email" id="email" placeholder="your@email.com" />
+      <div class="error-msg">Please enter a valid email.</div>
+    </div>
+    <div class="field" id="f-name">
+      <label>Full Name <span class="req">*</span></label>
+      <input type="text" id="fullname" placeholder="e.g. Md. Dipto Hossain" />
+      <div class="error-msg">Full name is required.</div>
+    </div>
+    <div class="field" id="f-level">
+      <label>Level <span class="req">*</span></label>
+      <input type="text" id="level" placeholder="e.g. Level 1, Level 2..." />
+      <div class="error-msg">Level is required.</div>
+    </div>
+    <div class="field" id="f-sid">
+      <label>Student ID <span class="req">*</span></label>
+      <input type="text" id="studentid" placeholder="e.g. 2210701" />
+      <div class="error-msg">Student ID is required.</div>
+    </div>
+    <div class="field" id="f-phone">
+      <label>Phone Number <span class="req">*</span></label>
+      <input type="tel" id="phone" placeholder="e.g. 017XXXXXXXX" />
+      <div class="error-msg">Phone number is required.</div>
+    </div>
+    <div class="field" id="f-gender">
+      <label>Gender <span class="req">*</span></label>
+      <div class="radio-group" id="gender">
+        <label class="radio-option" onclick="selectRadio(this,'gender')">
+          <input type="radio" name="gender" value="Male" /><span class="dot"></span> Male
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'gender')">
+          <input type="radio" name="gender" value="Female" /><span class="dot"></span> Female
+        </label>
+      </div>
+      <div class="error-msg" id="gender-err">Please select a gender.</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="goNext(1)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Section 2: Outdoor Sports & Football branch -->
+  <div class="section" id="sec2">
+    <div class="section-title">Sports Interests — Outdoor</div>
+    <div class="field">
+      <label>Which outdoor sports are you interested in? <span class="req">*</span></label>
+      <div class="checkbox-group" id="outdoorSports">
+        <label class="checkbox-option" onclick="toggleCheck(this,'outdoorSports')">
+          <span class="checkbox-dot"></span> Football
+        </label>
+        <label class="checkbox-option" onclick="toggleCheck(this,'outdoorSports')">
+          <span class="checkbox-dot"></span> Cricket
+        </label>
+        <label class="checkbox-option" onclick="toggleCheck(this,'outdoorSports')">
+          <span class="checkbox-dot"></span> Volleyball
+        </label>
+        <label class="checkbox-option" onclick="toggleCheck(this,'outdoorSports')">
+          <span class="checkbox-dot"></span> Others
+        </label>
+      </div>
+    </div>
+
+    <div class="field" id="f-football">
+      <label>Are you registering for Football? <span class="req">*</span></label>
+      <div class="radio-group" id="football">
+        <label class="radio-option" onclick="selectRadio(this,'football')">
+          <input type="radio" name="football" value="Yes" /><span class="dot"></span> Yes
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'football')">
+          <input type="radio" name="football" value="No" /><span class="dot"></span> No
+        </label>
+      </div>
+      <div class="error-msg" id="football-err">Please select an option.</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="goBack(2)">← Back</button>
+      <button class="btn btn-primary" onclick="goNext(2)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Section 3: Indoor Sports (shown if NOT football) -->
+  <div class="section" id="sec3">
+    <div class="section-title">Sports Interests — Indoor</div>
+    <div class="field">
+      <label>Which indoor/racket sports are you interested in?</label>
+      <div class="checkbox-group" id="indoorSports">
+        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
+          <span class="checkbox-dot"></span> Badminton
+        </label>
+        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
+          <span class="checkbox-dot"></span> Table Tennis
+        </label>
+        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
+          <span class="checkbox-dot"></span> Chess
+        </label>
+        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
+          <span class="checkbox-dot"></span> Carrom
+        </label>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="goBack(3)">← Back</button>
+      <button class="btn btn-primary" onclick="goSec5()">Next →</button>
+    </div>
+  </div>
+
+  <!-- Section 4: Football Position (shown if YES football) -->
+  <div class="section" id="sec4">
+    <div class="section-title">Football Squad Details</div>
+    <div class="field" id="f-position">
+      <label>Preferred Playing Position <span class="req">*</span></label>
+      <div class="radio-group" id="position">
+        <label class="radio-option" onclick="selectRadio(this,'position')">
+          <input type="radio" name="position" value="Striker / Forward" /><span class="dot"></span> ST — Striker / Forward
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'position')">
+          <input type="radio" name="position" value="Midfielder" /><span class="dot"></span> MID — Midfielder
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'position')">
+          <input type="radio" name="position" value="Defender" /><span class="dot"></span> DEF — Defender
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'position')">
+          <input type="radio" name="position" value="Goalkeeper" /><span class="dot"></span> GK — Goalkeeper
+        </label>
+      </div>
+      <div class="error-msg" id="position-err">Please select a position.</div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="goBack(4)">← Back</button>
+      <button class="btn btn-primary" onclick="goNext(4)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Section 5: Club Preferences -->
+  <div class="section" id="sec5">
+    <div class="section-title">Club Preferences</div>
+    <div class="field" id="f-experience">
+      <label>Have you played your selected sport(s) competitively before? <span class="req">*</span></label>
+      <div class="radio-group" id="experience">
+        <label class="radio-option" onclick="selectRadio(this,'experience')">
+          <input type="radio" name="experience" value="Yes - Competitive" /><span class="dot"></span> Yes (Inter-school/college or club level)
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'experience')">
+          <input type="radio" name="experience" value="Yes - Recreational" /><span class="dot"></span> Yes (Recreationally)
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'experience')">
+          <input type="radio" name="experience" value="No - Beginner" /><span class="dot"></span> No (I am a beginner, looking to learn)
+        </label>
+      </div>
+      <div class="error-msg" id="experience-err">Please select an option.</div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="goBack(5)">← Back</button>
+      <button class="btn btn-primary" onclick="goNext(5)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Section 6: Final -->
+  <div class="section" id="sec6">
+    <div class="section-title">Final Step & Socials</div>
+    <div class="info-box">
+      🎉 You're almost done! Don't forget to follow our official page to stay updated on upcoming events — Level 1 Inter-Dept Football Tournament in July, Cricket in August, and the annual BME Cup (Futsal).
+    </div>
+    <p style="font-size:14px; color: var(--muted); margin-bottom: 16px; line-height:1.7;">
+      Follow the <a href="https://www.facebook.com/bmemistsportsclub" target="_blank" style="color:var(--accent);">BME Sports Club Facebook Page</a> to stay connected with practice schedules, events, and group details.
+    </p>
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="goBack(6)">← Back</button>
+      <button class="btn btn-primary" onclick="submitForm()">Submit ✓</button>
+    </div>
+  </div>
+
+  <!-- Success -->
+  <div class="success" id="successMsg">
+    <div class="success-icon">✓</div>
+    <h2>Registration Complete!</h2>
+    <p>Thank you for joining the BME Sports Club! Your response has been recorded.<br><br>
+    Practice schedules and group details will be shared via WhatsApp soon.<br><br>
+    Follow us on <a href="https://www.facebook.com/bmemistsportsclub" target="_blank">Facebook</a> for updates.</p>
+  </div>
+</div>
+
+<script>
+  // State
+  let currentSection = 1;
+  let fromSection = null; // track where user came from for back nav
+
+  const totalSteps = 6;
+
+  function updateProgress(step) {
+    document.getElementById('progressFill').style.width = ((step / totalSteps) * 100) + '%';
+    document.getElementById('progressLabel').textContent = `Step ${step} of ${totalSteps}`;
+  }
+
+  function showSection(n) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('sec' + n).classList.add('active');
+    currentSection = n;
+    updateProgress(n);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function selectRadio(el, groupId) {
+    document.querySelectorAll(`#${groupId} .radio-option`).forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function toggleCheck(el, groupId) {
+    el.classList.toggle('selected');
+  }
+
+  function getRadioVal(groupId) {
+    const sel = document.querySelector(`#${groupId} .radio-option.selected input`);
+    return sel ? sel.value : null;
+  }
+
+  function validateSection1() {
+    let ok = true;
+    const fields = [
+      { id: 'email', fid: 'f-email', check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
+      { id: 'fullname', fid: 'f-name', check: v => v.trim().length > 1 },
+      { id: 'level', fid: 'f-level', check: v => v.trim().length > 0 },
+      { id: 'studentid', fid: 'f-sid', check: v => v.trim().length > 0 },
+      { id: 'phone', fid: 'f-phone', check: v => v.trim().length > 6 },
+    ];
+    fields.forEach(f => {
+      const val = document.getElementById(f.id).value;
+      const field = document.getElementById(f.fid);
+      if (!f.check(val)) { field.classList.add('has-error'); ok = false; }
+      else field.classList.remove('has-error');
+    });
+    const gender = getRadioVal('gender');
+    const gf = document.getElementById('f-gender');
+    if (!gender) { gf.classList.add('has-error'); ok = false; }
+    else gf.classList.remove('has-error');
+    return ok;
+  }
+
+  function goNext(sec) {
+    if (sec === 1) {
+      if (!validateSection1()) return;
+      showSection(2);
+    } else if (sec === 2) {
+      const fb = getRadioVal('football');
+      const ferr = document.getElementById('football-err');
+      if (!fb) { ferr.style.display = 'block'; return; }
+      ferr.style.display = 'none';
+      fromSection = 2;
+      if (fb === 'Yes') showSection(4);
+      else showSection(3);
+    } else if (sec === 4) {
+      const pos = getRadioVal('position');
+      if (!pos) { document.getElementById('position-err').style.display = 'block'; return; }
+      document.getElementById('position-err').style.display = 'none';
+      showSection(5);
+    } else if (sec === 5) {
+      const exp = getRadioVal('experience');
+      if (!exp) { document.getElementById('experience-err').style.display = 'block'; return; }
+      document.getElementById('experience-err').style.display = 'none';
+      showSection(6);
+    }
+  }
+
+  function goSec5() {
+    showSection(5);
+  }
+
+  function goBack(sec) {
+    if (sec === 2) showSection(1);
+    else if (sec === 3) showSection(2);
+    else if (sec === 4) showSection(2);
+    else if (sec === 5) {
+      const fb = getRadioVal('football');
+      if (fb === 'Yes') showSection(4);
+      else showSection(3);
+    }
+    else if (sec === 6) showSection(5);
+  }
+
+  function submitForm() {
+    // Hide all sections, show success
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('progressLabel').textContent = 'Complete!';
+    document.getElementById('successMsg').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
