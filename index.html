@@ -684,65 +684,47 @@
       'Experience Level': getRadioVal('experience') || '-'
     };
 
-    let apiRequests = [];
-
-    if (gender === 'Female') {
-      const sports = getCheckedVals('indoorSports').join(', ');
-      apiRequests.push(
-        fetch(`${SHEETDB_URL}?sheet=Female`, {
+    try {
+      // Sending requests sequentially (awaiting each one) to prevent SheetDB from dropping concurrent requests
+      if (gender === 'Female') {
+        const sports = getCheckedVals('indoorSports').join(', ');
+        await fetch(`${SHEETDB_URL}?sheet=Female`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ data: { ...baseData, 'Sports Interests': sports } })
-        })
-      );
-    } else {
-      const selected = getCheckedVals('outdoorSports');
-      
-      if (selected.includes('Football')) {
-        apiRequests.push(
-          fetch(`${SHEETDB_URL}?sheet=Football`, {
+        });
+      } else {
+        const selected = getCheckedVals('outdoorSports');
+        
+        if (selected.includes('Football')) {
+          await fetch(`${SHEETDB_URL}?sheet=Football`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ data: { ...baseData, 'Preferred Position': getRadioVal('position') } })
-          })
-        );
-      }
-      if (selected.includes('Cricket')) {
-        apiRequests.push(
-          fetch(`${SHEETDB_URL}?sheet=Cricket`, {
+          });
+        }
+        if (selected.includes('Cricket')) {
+          await fetch(`${SHEETDB_URL}?sheet=Cricket`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ data: { ...baseData, 'Preferred Role': getRadioVal('cricketRole') } })
-          })
-        );
-      }
-      if (selected.includes('Volleyball')) {
-        apiRequests.push(
-          fetch(`${SHEETDB_URL}?sheet=Volleyball`, {
+          });
+        }
+        if (selected.includes('Volleyball')) {
+          await fetch(`${SHEETDB_URL}?sheet=Volleyball`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ data: { ...baseData } })
-          })
-        );
-      }
-      if (selected.includes('Others') || selected.length === 0) {
-        apiRequests.push(
-          fetch(`${SHEETDB_URL}?sheet=Others`, {
+          });
+        }
+        if (selected.includes('Others') || selected.length === 0) {
+          await fetch(`${SHEETDB_URL}?sheet=Others`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ data: { ...baseData, 'Sports Interests': selected.join(', ') } })
-          })
-        );
+          });
+        }
       }
-    }
-
-    try {
-      // Execute all selected sheet submissions at the same time
-      const responses = await Promise.all(apiRequests);
-      
-      responses.forEach(res => {
-        if (!res.ok) throw new Error('Server error');
-      });
 
       // Show success
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
