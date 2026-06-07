@@ -251,6 +251,11 @@
     flex: 1;
   }
   .btn-primary:hover { box-shadow: 0 4px 20px rgba(0,229,160,0.3); }
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
   .btn-secondary {
     background: transparent;
     border: 1px solid var(--border);
@@ -295,6 +300,14 @@
     line-height: 1.6;
   }
 
+  .submitting-msg {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 12px;
+    display: none;
+  }
+
   @media (max-width: 520px) {
     .header, .section, .success { padding-left: 24px; padding-right: 24px; }
     .progress-label { padding-left: 24px; padding-right: 24px; }
@@ -318,7 +331,6 @@
   <!-- Section 1: Basic Info -->
   <div class="section active" id="sec1">
     <div class="section-title">Basic Information</div>
-
     <div class="field" id="f-email">
       <label>Email <span class="req">*</span></label>
       <input type="email" id="email" placeholder="your@email.com" />
@@ -356,17 +368,16 @@
       </div>
       <div class="error-msg" id="gender-err">Please select a gender.</div>
     </div>
-
     <div class="actions">
       <button class="btn btn-primary" onclick="goNext(1)">Next →</button>
     </div>
   </div>
 
-  <!-- Section 2: Male — Outdoor Sports + Football branch -->
+  <!-- Section 2: Male — Outdoor Sports -->
   <div class="section" id="sec2">
     <div class="section-title">Sports Interests</div>
     <div class="field">
-      <label>Which sports are you interested in? <span class="req">*</span></label>
+      <label>Which sports are you interested in?</label>
       <div class="checkbox-group" id="outdoorSports">
         <label class="checkbox-option" onclick="toggleCheck(this,'outdoorSports')">
           <span class="checkbox-dot"></span> Football
@@ -382,7 +393,6 @@
         </label>
       </div>
     </div>
-
     <div class="field" id="f-football">
       <label>Are you registering for Football? <span class="req">*</span></label>
       <div class="radio-group" id="football">
@@ -395,14 +405,13 @@
       </div>
       <div class="error-msg" id="football-err">Please select an option.</div>
     </div>
-
     <div class="actions">
       <button class="btn btn-secondary" onclick="showSection(1)">← Back</button>
       <button class="btn btn-primary" onclick="goNext(2)">Next →</button>
     </div>
   </div>
 
-  <!-- Section 3: Male Football — Position picker -->
+  <!-- Section 3: Male Football Position -->
   <div class="section" id="sec3">
     <div class="section-title">Football Squad Details</div>
     <div class="field" id="f-position">
@@ -455,7 +464,7 @@
     </div>
   </div>
 
-  <!-- Section 5: Club Preferences (all) -->
+  <!-- Section 5: Club Preferences -->
   <div class="section" id="sec5">
     <div class="section-title">Club Preferences</div>
     <div class="field" id="f-experience">
@@ -490,8 +499,9 @@
     </p>
     <div class="actions">
       <button class="btn btn-secondary" onclick="showSection(5)">← Back</button>
-      <button class="btn btn-primary" onclick="submitForm()">Submit ✓</button>
+      <button class="btn btn-primary" id="submitBtn" onclick="submitForm()">Submit ✓</button>
     </div>
+    <div class="submitting-msg" id="submittingMsg">Saving your response...</div>
   </div>
 
   <!-- Success -->
@@ -505,6 +515,7 @@
 </div>
 
 <script>
+  const SHEETDB_URL = 'https://sheetdb.io/api/v1/wwkwgxc5wdtvg';
   const totalSteps = 5;
 
   function getGender() {
@@ -520,8 +531,6 @@
   function showSection(n) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.getElementById('sec' + n).classList.add('active');
-    // Map section numbers to progress steps
-    // sec1=1, sec2=2, sec3=3, sec4=2, sec5=4, sec6=5
     const stepMap = { 1:1, 2:2, 3:3, 4:2, 5:4, 6:5 };
     updateProgress(stepMap[n] || n);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -532,13 +541,19 @@
     el.classList.add('selected');
   }
 
-  function toggleCheck(el, groupId) {
+  function toggleCheck(el) {
     el.classList.toggle('selected');
   }
 
   function getRadioVal(groupId) {
     const sel = document.querySelector(`#${groupId} .radio-option.selected input`);
     return sel ? sel.value : null;
+  }
+
+  function getCheckedVals(groupId) {
+    return Array.from(document.querySelectorAll(`#${groupId} .checkbox-option.selected`))
+      .map(el => el.textContent.trim())
+      .join(', ');
   }
 
   function validateSection1() {
@@ -566,21 +581,18 @@
   function goNext(sec) {
     if (sec === 1) {
       if (!validateSection1()) return;
-      // Branch by gender
       if (getGender() === 'Female') showSection(4);
       else showSection(2);
 
     } else if (sec === 2) {
-      // Male: check football answer
       const fb = getRadioVal('football');
       const ferr = document.getElementById('football-err');
       if (!fb) { ferr.style.display = 'block'; return; }
       ferr.style.display = 'none';
       if (fb === 'Yes') showSection(3);
-      else showSection(5); // No football → skip position, go to club prefs
+      else showSection(5);
 
     } else if (sec === 3) {
-      // Football position
       const pos = getRadioVal('position');
       if (!pos) { document.getElementById('position-err').style.display = 'block'; return; }
       document.getElementById('position-err').style.display = 'none';
@@ -604,12 +616,52 @@
     }
   }
 
-  function submitForm() {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.getElementById('progressFill').style.width = '100%';
-    document.getElementById('progressLabel').textContent = 'Complete!';
-    document.getElementById('successMsg').classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  async function submitForm() {
+    const btn = document.getElementById('submitBtn');
+    const msg = document.getElementById('submittingMsg');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+    msg.style.display = 'block';
+
+    const gender = getGender();
+    const sportsKey = gender === 'Female' ? 'indoorSports' : 'outdoorSports';
+
+    const data = {
+      Timestamp: new Date().toLocaleString('en-GB'),
+      Email: document.getElementById('email').value.trim(),
+      'Full Name': document.getElementById('fullname').value.trim(),
+      Level: document.getElementById('level').value.trim(),
+      'Student ID': document.getElementById('studentid').value.trim(),
+      'Phone Number': document.getElementById('phone').value.trim(),
+      Gender: gender,
+      'Sports Interests': getCheckedVals(sportsKey) || 'None selected',
+      'Football Registration': gender === 'Male' ? (getRadioVal('football') || '-') : 'N/A',
+      'Preferred Position': gender === 'Male' && getRadioVal('football') === 'Yes' ? (getRadioVal('position') || '-') : 'N/A',
+      'Experience Level': getRadioVal('experience') || '-',
+    };
+
+    try {
+      const res = await fetch(SHEETDB_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data }),
+      });
+
+      if (!res.ok) throw new Error('Server error');
+
+      // Show success
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById('progressFill').style.width = '100%';
+      document.getElementById('progressLabel').textContent = 'Complete!';
+      document.getElementById('successMsg').classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Submit ✓';
+      msg.style.display = 'none';
+      alert('Submission failed. Please check your connection and try again.');
+    }
   }
 </script>
 </body>
