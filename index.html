@@ -91,11 +91,7 @@
   .header a { color: var(--accent); text-decoration: none; }
   .header a:hover { text-decoration: underline; }
 
-  .progress-bar {
-    height: 3px;
-    background: var(--border);
-    position: relative;
-  }
+  .progress-bar { height: 3px; background: var(--border); position: relative; }
   .progress-fill {
     height: 100%;
     background: linear-gradient(90deg, var(--accent), var(--accent2));
@@ -158,7 +154,6 @@
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(0,229,160,0.1);
   }
-  input.error { border-color: var(--error); }
 
   .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 10px; }
   .radio-option, .checkbox-option {
@@ -316,9 +311,9 @@
   </div>
 
   <div class="progress-bar">
-    <div class="progress-fill" id="progressFill" style="width: 16.6%"></div>
+    <div class="progress-fill" id="progressFill" style="width: 20%"></div>
   </div>
-  <div class="progress-label" id="progressLabel">Step 1 of 6</div>
+  <div class="progress-label" id="progressLabel">Step 1 of 5</div>
 
   <!-- Section 1: Basic Info -->
   <div class="section active" id="sec1">
@@ -331,17 +326,17 @@
     </div>
     <div class="field" id="f-name">
       <label>Full Name <span class="req">*</span></label>
-      <input type="text" id="fullname" placeholder="e.g. Md. Dipto Hossain" />
+      <input type="text" id="fullname" placeholder="e.g. Ahnaf Abtahi" />
       <div class="error-msg">Full name is required.</div>
     </div>
     <div class="field" id="f-level">
       <label>Level <span class="req">*</span></label>
-      <input type="text" id="level" placeholder="e.g. Level 1, Level 2..." />
+      <input type="text" id="level" placeholder="e.g. Level 1" />
       <div class="error-msg">Level is required.</div>
     </div>
     <div class="field" id="f-sid">
       <label>Student ID <span class="req">*</span></label>
-      <input type="text" id="studentid" placeholder="e.g. 2210701" />
+      <input type="text" id="studentid" placeholder="e.g. 2026260**" />
       <div class="error-msg">Student ID is required.</div>
     </div>
     <div class="field" id="f-phone">
@@ -367,11 +362,11 @@
     </div>
   </div>
 
-  <!-- Section 2: Outdoor Sports & Football branch -->
+  <!-- Section 2: Male — Outdoor Sports + Football branch -->
   <div class="section" id="sec2">
-    <div class="section-title">Sports Interests — Outdoor</div>
+    <div class="section-title">Sports Interests</div>
     <div class="field">
-      <label>Which outdoor sports are you interested in? <span class="req">*</span></label>
+      <label>Which sports are you interested in? <span class="req">*</span></label>
       <div class="checkbox-group" id="outdoorSports">
         <label class="checkbox-option" onclick="toggleCheck(this,'outdoorSports')">
           <span class="checkbox-dot"></span> Football
@@ -402,39 +397,13 @@
     </div>
 
     <div class="actions">
-      <button class="btn btn-secondary" onclick="goBack(2)">← Back</button>
+      <button class="btn btn-secondary" onclick="showSection(1)">← Back</button>
       <button class="btn btn-primary" onclick="goNext(2)">Next →</button>
     </div>
   </div>
 
-  <!-- Section 3: Indoor Sports (shown if NOT football) -->
+  <!-- Section 3: Male Football — Position picker -->
   <div class="section" id="sec3">
-    <div class="section-title">Sports Interests — Indoor</div>
-    <div class="field">
-      <label>Which indoor/racket sports are you interested in?</label>
-      <div class="checkbox-group" id="indoorSports">
-        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
-          <span class="checkbox-dot"></span> Badminton
-        </label>
-        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
-          <span class="checkbox-dot"></span> Table Tennis
-        </label>
-        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
-          <span class="checkbox-dot"></span> Chess
-        </label>
-        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
-          <span class="checkbox-dot"></span> Carrom
-        </label>
-      </div>
-    </div>
-    <div class="actions">
-      <button class="btn btn-secondary" onclick="goBack(3)">← Back</button>
-      <button class="btn btn-primary" onclick="goSec5()">Next →</button>
-    </div>
-  </div>
-
-  <!-- Section 4: Football Position (shown if YES football) -->
-  <div class="section" id="sec4">
     <div class="section-title">Football Squad Details</div>
     <div class="field" id="f-position">
       <label>Preferred Playing Position <span class="req">*</span></label>
@@ -455,12 +424,38 @@
       <div class="error-msg" id="position-err">Please select a position.</div>
     </div>
     <div class="actions">
-      <button class="btn btn-secondary" onclick="goBack(4)">← Back</button>
-      <button class="btn btn-primary" onclick="goNext(4)">Next →</button>
+      <button class="btn btn-secondary" onclick="showSection(2)">← Back</button>
+      <button class="btn btn-primary" onclick="goNext(3)">Next →</button>
     </div>
   </div>
 
-  <!-- Section 5: Club Preferences -->
+  <!-- Section 4: Female — Indoor Sports -->
+  <div class="section" id="sec4">
+    <div class="section-title">Sports Interests</div>
+    <div class="field">
+      <label>Which sports are you interested in?</label>
+      <div class="checkbox-group" id="indoorSports">
+        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
+          <span class="checkbox-dot"></span> Badminton
+        </label>
+        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
+          <span class="checkbox-dot"></span> Table Tennis
+        </label>
+        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
+          <span class="checkbox-dot"></span> Chess
+        </label>
+        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
+          <span class="checkbox-dot"></span> Carrom
+        </label>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="showSection(1)">← Back</button>
+      <button class="btn btn-primary" onclick="showSection(5)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Section 5: Club Preferences (all) -->
   <div class="section" id="sec5">
     <div class="section-title">Club Preferences</div>
     <div class="field" id="f-experience">
@@ -479,7 +474,7 @@
       <div class="error-msg" id="experience-err">Please select an option.</div>
     </div>
     <div class="actions">
-      <button class="btn btn-secondary" onclick="goBack(5)">← Back</button>
+      <button class="btn btn-secondary" onclick="goBackSec5()">← Back</button>
       <button class="btn btn-primary" onclick="goNext(5)">Next →</button>
     </div>
   </div>
@@ -494,7 +489,7 @@
       Follow the <a href="https://www.facebook.com/bmemistsportsclub" target="_blank" style="color:var(--accent);">BME Sports Club Facebook Page</a> to stay connected with practice schedules, events, and group details.
     </p>
     <div class="actions">
-      <button class="btn btn-secondary" onclick="goBack(6)">← Back</button>
+      <button class="btn btn-secondary" onclick="showSection(5)">← Back</button>
       <button class="btn btn-primary" onclick="submitForm()">Submit ✓</button>
     </div>
   </div>
@@ -510,11 +505,12 @@
 </div>
 
 <script>
-  // State
-  let currentSection = 1;
-  let fromSection = null; // track where user came from for back nav
+  const totalSteps = 5;
 
-  const totalSteps = 6;
+  function getGender() {
+    const sel = document.querySelector('#gender .radio-option.selected input');
+    return sel ? sel.value : null;
+  }
 
   function updateProgress(step) {
     document.getElementById('progressFill').style.width = ((step / totalSteps) * 100) + '%';
@@ -524,8 +520,10 @@
   function showSection(n) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.getElementById('sec' + n).classList.add('active');
-    currentSection = n;
-    updateProgress(n);
+    // Map section numbers to progress steps
+    // sec1=1, sec2=2, sec3=3, sec4=2, sec5=4, sec6=5
+    const stepMap = { 1:1, 2:2, 3:3, 4:2, 5:4, 6:5 };
+    updateProgress(stepMap[n] || n);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -558,7 +556,7 @@
       if (!f.check(val)) { field.classList.add('has-error'); ok = false; }
       else field.classList.remove('has-error');
     });
-    const gender = getRadioVal('gender');
+    const gender = getGender();
     const gf = document.getElementById('f-gender');
     if (!gender) { gf.classList.add('has-error'); ok = false; }
     else gf.classList.remove('has-error');
@@ -568,20 +566,26 @@
   function goNext(sec) {
     if (sec === 1) {
       if (!validateSection1()) return;
-      showSection(2);
+      // Branch by gender
+      if (getGender() === 'Female') showSection(4);
+      else showSection(2);
+
     } else if (sec === 2) {
+      // Male: check football answer
       const fb = getRadioVal('football');
       const ferr = document.getElementById('football-err');
       if (!fb) { ferr.style.display = 'block'; return; }
       ferr.style.display = 'none';
-      fromSection = 2;
-      if (fb === 'Yes') showSection(4);
-      else showSection(3);
-    } else if (sec === 4) {
+      if (fb === 'Yes') showSection(3);
+      else showSection(5); // No football → skip position, go to club prefs
+
+    } else if (sec === 3) {
+      // Football position
       const pos = getRadioVal('position');
       if (!pos) { document.getElementById('position-err').style.display = 'block'; return; }
       document.getElementById('position-err').style.display = 'none';
       showSection(5);
+
     } else if (sec === 5) {
       const exp = getRadioVal('experience');
       if (!exp) { document.getElementById('experience-err').style.display = 'block'; return; }
@@ -590,24 +594,17 @@
     }
   }
 
-  function goSec5() {
-    showSection(5);
-  }
-
-  function goBack(sec) {
-    if (sec === 2) showSection(1);
-    else if (sec === 3) showSection(2);
-    else if (sec === 4) showSection(2);
-    else if (sec === 5) {
+  function goBackSec5() {
+    const gender = getGender();
+    if (gender === 'Female') showSection(4);
+    else {
       const fb = getRadioVal('football');
-      if (fb === 'Yes') showSection(4);
-      else showSection(3);
+      if (fb === 'Yes') showSection(3);
+      else showSection(2);
     }
-    else if (sec === 6) showSection(5);
   }
 
   function submitForm() {
-    // Hide all sections, show success
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.getElementById('progressFill').style.width = '100%';
     document.getElementById('progressLabel').textContent = 'Complete!';
