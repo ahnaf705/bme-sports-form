@@ -376,34 +376,23 @@
   <!-- Section 2: Male — Outdoor Sports -->
   <div class="section" id="sec2">
     <div class="section-title">Sports Interests</div>
-    <div class="field">
-      <label>Which sports are you interested in?</label>
+    <div class="field" id="f-outdoorSports">
+      <label>Which sports are you registering for? <span class="req">*</span></label>
       <div class="checkbox-group" id="outdoorSports">
-        <label class="checkbox-option" onclick="toggleCheck(this,'outdoorSports')">
+        <label class="checkbox-option" onclick="toggleCheck(this)">
           <span class="checkbox-dot"></span> Football
         </label>
-        <label class="checkbox-option" onclick="toggleCheck(this,'outdoorSports')">
+        <label class="checkbox-option" onclick="toggleCheck(this)">
           <span class="checkbox-dot"></span> Cricket
         </label>
-        <label class="checkbox-option" onclick="toggleCheck(this,'outdoorSports')">
+        <label class="checkbox-option" onclick="toggleCheck(this)">
           <span class="checkbox-dot"></span> Volleyball
         </label>
-        <label class="checkbox-option" onclick="toggleCheck(this,'outdoorSports')">
+        <label class="checkbox-option" onclick="toggleCheck(this)">
           <span class="checkbox-dot"></span> Others
         </label>
       </div>
-    </div>
-    <div class="field" id="f-football">
-      <label>Are you registering for Football? <span class="req">*</span></label>
-      <div class="radio-group" id="football">
-        <label class="radio-option" onclick="selectRadio(this,'football')">
-          <input type="radio" name="football" value="Yes" /><span class="dot"></span> Yes
-        </label>
-        <label class="radio-option" onclick="selectRadio(this,'football')">
-          <input type="radio" name="football" value="No" /><span class="dot"></span> No
-        </label>
-      </div>
-      <div class="error-msg" id="football-err">Please select an option.</div>
+      <div class="error-msg" id="outdoorSports-err">Please select at least one sport.</div>
     </div>
     <div class="actions">
       <button class="btn btn-secondary" onclick="showSection(1)">← Back</button>
@@ -411,11 +400,13 @@
     </div>
   </div>
 
-  <!-- Section 3: Male Football Position -->
+  <!-- Section 3: Male Sport Specific Roles -->
   <div class="section" id="sec3">
-    <div class="section-title">Football Squad Details</div>
-    <div class="field" id="f-position">
-      <label>Preferred Playing Position <span class="req">*</span></label>
+    <div class="section-title">Squad Details</div>
+    
+    <!-- Football Block -->
+    <div class="field" id="f-position" style="display: none;">
+      <label>Preferred Football Position <span class="req">*</span></label>
       <div class="radio-group" id="position">
         <label class="radio-option" onclick="selectRadio(this,'position')">
           <input type="radio" name="position" value="Striker / Forward" /><span class="dot"></span> ST — Striker / Forward
@@ -430,8 +421,26 @@
           <input type="radio" name="position" value="Goalkeeper" /><span class="dot"></span> GK — Goalkeeper
         </label>
       </div>
-      <div class="error-msg" id="position-err">Please select a position.</div>
+      <div class="error-msg" id="position-err">Please select a football position.</div>
     </div>
+
+    <!-- Cricket Block -->
+    <div class="field" id="f-cricket-role" style="display: none;">
+      <label>Preferred Cricket Role <span class="req">*</span></label>
+      <div class="radio-group" id="cricketRole">
+        <label class="radio-option" onclick="selectRadio(this,'cricketRole')">
+          <input type="radio" name="cricketRole" value="Batsman" /><span class="dot"></span> Batsman
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'cricketRole')">
+          <input type="radio" name="cricketRole" value="Bowler" /><span class="dot"></span> Bowler
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'cricketRole')">
+          <input type="radio" name="cricketRole" value="All-Rounder" /><span class="dot"></span> All-Rounder
+        </label>
+      </div>
+      <div class="error-msg" id="cricket-err">Please select a cricket role.</div>
+    </div>
+
     <div class="actions">
       <button class="btn btn-secondary" onclick="showSection(2)">← Back</button>
       <button class="btn btn-primary" onclick="goNext(3)">Next →</button>
@@ -441,26 +450,27 @@
   <!-- Section 4: Female — Indoor Sports -->
   <div class="section" id="sec4">
     <div class="section-title">Sports Interests</div>
-    <div class="field">
-      <label>Which sports are you interested in?</label>
+    <div class="field" id="f-indoorSports">
+      <label>Which sports are you interested in? <span class="req">*</span></label>
       <div class="checkbox-group" id="indoorSports">
-        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
+        <label class="checkbox-option" onclick="toggleCheck(this)">
           <span class="checkbox-dot"></span> Badminton
         </label>
-        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
+        <label class="checkbox-option" onclick="toggleCheck(this)">
           <span class="checkbox-dot"></span> Table Tennis
         </label>
-        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
+        <label class="checkbox-option" onclick="toggleCheck(this)">
           <span class="checkbox-dot"></span> Chess
         </label>
-        <label class="checkbox-option" onclick="toggleCheck(this,'indoorSports')">
+        <label class="checkbox-option" onclick="toggleCheck(this)">
           <span class="checkbox-dot"></span> Carrom
         </label>
       </div>
+      <div class="error-msg" id="indoorSports-err">Please select at least one sport.</div>
     </div>
     <div class="actions">
       <button class="btn btn-secondary" onclick="showSection(1)">← Back</button>
-      <button class="btn btn-primary" onclick="showSection(5)">Next →</button>
+      <button class="btn btn-primary" onclick="goNext(4)">Next →</button>
     </div>
   </div>
 
@@ -501,7 +511,7 @@
       <button class="btn btn-secondary" onclick="showSection(5)">← Back</button>
       <button class="btn btn-primary" id="submitBtn" onclick="submitForm()">Submit ✓</button>
     </div>
-    <div class="submitting-msg" id="submittingMsg">Saving your response...</div>
+    <div class="submitting-msg" id="submittingMsg">Routing your response to the spreadsheets...</div>
   </div>
 
   <!-- Success -->
@@ -552,8 +562,7 @@
 
   function getCheckedVals(groupId) {
     return Array.from(document.querySelectorAll(`#${groupId} .checkbox-option.selected`))
-      .map(el => el.textContent.trim())
-      .join(', ');
+      .map(el => el.textContent.trim());
   }
 
   function validateSection1() {
@@ -585,17 +594,55 @@
       else showSection(2);
 
     } else if (sec === 2) {
-      const fb = getRadioVal('football');
-      const ferr = document.getElementById('football-err');
-      if (!fb) { ferr.style.display = 'block'; return; }
-      ferr.style.display = 'none';
-      if (fb === 'Yes') showSection(3);
-      else showSection(5);
+      const selected = getCheckedVals('outdoorSports');
+      const err = document.getElementById('outdoorSports-err');
+      if (selected.length === 0) {
+        err.style.display = 'block'; 
+        return; 
+      }
+      err.style.display = 'none';
+
+      const hasFootball = selected.includes('Football');
+      const hasCricket = selected.includes('Cricket');
+
+      if (hasFootball || hasCricket) {
+        document.getElementById('f-position').style.display = hasFootball ? 'block' : 'none';
+        document.getElementById('f-cricket-role').style.display = hasCricket ? 'block' : 'none';
+        showSection(3);
+      } else {
+        // Skips role selection if only Volleyball/Others chosen
+        showSection(5);
+      }
 
     } else if (sec === 3) {
-      const pos = getRadioVal('position');
-      if (!pos) { document.getElementById('position-err').style.display = 'block'; return; }
-      document.getElementById('position-err').style.display = 'none';
+      let ok = true;
+      const selected = getCheckedVals('outdoorSports');
+      
+      if (selected.includes('Football') && !getRadioVal('position')) {
+        document.getElementById('position-err').style.display = 'block';
+        ok = false;
+      } else {
+        document.getElementById('position-err').style.display = 'none';
+      }
+
+      if (selected.includes('Cricket') && !getRadioVal('cricketRole')) {
+        document.getElementById('cricket-err').style.display = 'block';
+        ok = false;
+      } else {
+        document.getElementById('cricket-err').style.display = 'none';
+      }
+
+      if (!ok) return;
+      showSection(5);
+
+    } else if (sec === 4) {
+      const selected = getCheckedVals('indoorSports');
+      const err = document.getElementById('indoorSports-err');
+      if (selected.length === 0) {
+        err.style.display = 'block';
+        return;
+      }
+      err.style.display = 'none';
       showSection(5);
 
     } else if (sec === 5) {
@@ -610,9 +657,12 @@
     const gender = getGender();
     if (gender === 'Female') showSection(4);
     else {
-      const fb = getRadioVal('football');
-      if (fb === 'Yes') showSection(3);
-      else showSection(2);
+      const selectedSports = getCheckedVals('outdoorSports');
+      if (selectedSports.includes('Football') || selectedSports.includes('Cricket')) {
+        showSection(3);
+      } else {
+        showSection(2);
+      }
     }
   }
 
@@ -624,30 +674,75 @@
     msg.style.display = 'block';
 
     const gender = getGender();
-    const sportsKey = gender === 'Female' ? 'indoorSports' : 'outdoorSports';
-
-    const data = {
+    const baseData = {
       Timestamp: new Date().toLocaleString('en-GB'),
       Email: document.getElementById('email').value.trim(),
       'Full Name': document.getElementById('fullname').value.trim(),
       Level: document.getElementById('level').value.trim(),
       'Student ID': document.getElementById('studentid').value.trim(),
       'Phone Number': document.getElementById('phone').value.trim(),
-      Gender: gender,
-      'Sports Interests': getCheckedVals(sportsKey) || 'None selected',
-      'Football Registration': gender === 'Male' ? (getRadioVal('football') || '-') : 'N/A',
-      'Preferred Position': gender === 'Male' && getRadioVal('football') === 'Yes' ? (getRadioVal('position') || '-') : 'N/A',
-      'Experience Level': getRadioVal('experience') || '-',
+      'Experience Level': getRadioVal('experience') || '-'
     };
 
-    try {
-      const res = await fetch(SHEETDB_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data }),
-      });
+    let apiRequests = [];
 
-      if (!res.ok) throw new Error('Server error');
+    if (gender === 'Female') {
+      const sports = getCheckedVals('indoorSports').join(', ');
+      apiRequests.push(
+        fetch(`${SHEETDB_URL}?sheet=Female`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: { ...baseData, 'Sports Interests': sports } })
+        })
+      );
+    } else {
+      const selected = getCheckedVals('outdoorSports');
+      
+      if (selected.includes('Football')) {
+        apiRequests.push(
+          fetch(`${SHEETDB_URL}?sheet=Football`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: { ...baseData, 'Preferred Position': getRadioVal('position') } })
+          })
+        );
+      }
+      if (selected.includes('Cricket')) {
+        apiRequests.push(
+          fetch(`${SHEETDB_URL}?sheet=Cricket`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: { ...baseData, 'Preferred Role': getRadioVal('cricketRole') } })
+          })
+        );
+      }
+      if (selected.includes('Volleyball')) {
+        apiRequests.push(
+          fetch(`${SHEETDB_URL}?sheet=Volleyball`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: { ...baseData } })
+          })
+        );
+      }
+      if (selected.includes('Others') || selected.length === 0) {
+        apiRequests.push(
+          fetch(`${SHEETDB_URL}?sheet=Others`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: { ...baseData, 'Sports Interests': selected.join(', ') } })
+          })
+        );
+      }
+    }
+
+    try {
+      // Execute all selected sheet submissions at the same time
+      const responses = await Promise.all(apiRequests);
+      
+      responses.forEach(res => {
+        if (!res.ok) throw new Error('Server error');
+      });
 
       // Show success
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -660,7 +755,7 @@
       btn.disabled = false;
       btn.textContent = 'Submit ✓';
       msg.style.display = 'none';
-      alert('Submission failed. Please check your connection and try again.');
+      alert('Submission failed. Make sure your Spreadsheet has tabs named exactly: Football, Cricket, Volleyball, Female, Others. Check your connection and try again.');
     }
   }
 </script>
